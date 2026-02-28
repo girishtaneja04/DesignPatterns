@@ -66,7 +66,9 @@ class printManager
             return interface_[type];
         }
 
-        throw runtime_error("interface & factories not exist, so plz check");
+        string err = "interface & factories not exist, so plz check for type ";
+        string err1 = err + type;
+        throw runtime_error(err1);
     }
 
     unordered_map<string, std::function<shared_ptr<iPrinter>()>> factories_;
@@ -75,11 +77,20 @@ class printManager
 
 int main()
 {
-    printManager::getInstance().registerPrinter<localPrinter>("local");
-    printManager::getInstance().registerPrinter<canonPrinter>("canon");
+        printManager::getInstance().registerPrinter<localPrinter>("local");
+        printManager::getInstance().registerPrinter<canonPrinter>("canon");
 
-    printManager::getInstance().get("local")->print();
-    printManager::getInstance().get("canon")->print();
+    try
+    {
+        printManager::getInstance().get("local")->print();
+        printManager::getInstance().get("canon")->print();
+        printManager::getInstance().get("cano")->print();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
 
     return 0;
 }
